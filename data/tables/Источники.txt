@@ -1,0 +1,18 @@
+Chemical_Industry.csv - rccnews.ru (2001, 2005, 2006),
+https://www.indexmundi.com/trade/exports/?country=ru (2006-2011),
+Экспорт общий - https://www.indexmundi.com/trade/exports/?country=ru (2005-2011)
+https://www.alta.ru/sfo_news/27742/ 2013
+https://rupec.ru/news/32613/ 2015
+https://sdelanounas.ru/blogs/103861/ 2017
+https://www.oknamedia.ru/novosti/pochemu-vozrozhdenie-himicheskoy-promyshlennosti-vazhno-dlya-ekonomiki-rossii-i-okonnoy-otrasli-53063 2020-2021
+https://axillc.ru/news/novinki/eksport-khimproduktsii-iz-rossii-v-2024-godu-vyros-na-1-3/ 2024
+https://trendeconomy.com/data/h2/Russia/2815 - продажи соды каустической
+
+Metal_Industry.csv
+https://www.vavt-imef.ru/wp-content/uploads/2020/12/%D0%AD%D0%BA%D1%81%D0%BF%D0%BE%D1%80%D1%82%D0%BD%D1%8B%D0%B9-%D0%BF%D0%BE%D1%82%D0%B5%D0%BD%D1%86%D0%B8%D0%B0%D0%BB-%D0%BC%D0%B5%D1%82%D0%B0%D0%BB%D0%BB%D1%83%D1%80%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B9-%D0%BF%D1%80%D0%BE%D0%BC%D1%8B%D1%88%D0%BB%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8-%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8.pdf
+https://tradingeconomics.com/russia/exports/nickel - продажи никеля
+https://tradingeconomics.com/russia/exports/aluminum - продажи аллюминия
+https://www.interfax.ru/business/697153 - золото
+
+Total_Industry.csv
+https://rosstat.gov.ru/statistics/vneshnyaya_torgovlya
