@@ -4,6 +4,18 @@ from .element import Element
 
 from app import db
 
+
+class IonElement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'), nullable=False)
+    element_id = db.Column(db.Integer, db.ForeignKey(Element.id), nullable=False)
+    element_amount = db.Column(db.Float, nullable=False, default=1)
+
+    ion = db.relationship("Ion", lazy=True)
+    element = db.relationship(Element, lazy=True)
+
+
+
 class IonPotential(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'), nullable=False)
@@ -21,7 +33,7 @@ class Ion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     charge = db.Column(db.Integer)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    formula = db.Column(db.String(50), unique=True, nullable=False)
+    composition = db.relationship(IonElement, lazy=True)
     potentials = db.relationship(IonPotential, foreign_keys=IonPotential.ion_id)
 
 
