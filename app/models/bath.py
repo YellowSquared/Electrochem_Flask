@@ -6,22 +6,23 @@ from app import db
 
 
 class BathSoluteComponent(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    ionic_compound_id = db.Column(db.Integer, db.ForeignKey(IonicCompound.id), nullable=False)
+    bath_id = db.Column(db.Integer, db.ForeignKey("bath.id"), primary_key=True)
+    ionic_compound_id = db.Column(db.Integer, db.ForeignKey(IonicCompound.id), primary_key=True)
     concentration = db.Column(db.Float, nullable=False)
 
     ionic_compound = db.relationship(IonicCompound, lazy=True)
+    bath = db.relationship("Bath", lazy=True)
 
 
 class Bath(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False, default="Bath")
-    solutes = db.relationship(BathSoluteComponent, backref='bath', lazy=True)
+    solutes = db.relationship(BathSoluteComponent, back_populates="bath", lazy=True)
     anode_id = db.Column(db.Integer, db.ForeignKey(Electrode.id), nullable=False)
     cathode_id = db.Column(db.Integer, db.ForeignKey(Electrode.id), nullable=False)
 
-    anode = db.relationship(Electrode, lazy=True)
-    cathode = db.relationship(Electrode, lazy=True)
+    anode = db.relationship(Electrode, foreign_keys=[anode_id], lazy=True)
+    cathode = db.relationship(Electrode, foreign_keys=[cathode_id], lazy=True)
 
 
     def dominating_anion(self) -> Optional[Ion]:

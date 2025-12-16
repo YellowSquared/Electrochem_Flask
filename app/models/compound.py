@@ -13,5 +13,5 @@ class CompoundElementComponent(db.Model):
 class Compound(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    components = db.relationship(CompoundElementComponent, lazy=True)
+    components = db.relationship(CompoundElementComponent, back_populates="compound", lazy=True)
 

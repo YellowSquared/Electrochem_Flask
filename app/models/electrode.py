@@ -16,7 +16,7 @@ class Electrode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     material = db.Column(db.String(100), nullable=False)
-    ion_overpotential_effect = db.relationship(ElectrodeIonEffect, lazy=True)
+    ion_overpotential_effect = db.relationship(ElectrodeIonEffect, back_populates="electrode", lazy=True)
 
 
 

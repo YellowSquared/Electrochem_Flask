@@ -1,17 +1,16 @@
 from flask_sqlalchemy import SQLAlchemy
 from .solvent import Solvent
 from .ion import Ion
-from .compound import Compound
 from app import db
 
 
 class Solubility(db.Model):
-    compound_id = db.Column(db.Integer, db.ForeignKey(Compound.id), primary_key=True)
+    ionic_compound_id = db.Column(db.Integer, db.ForeignKey("ionic_compound.id"), primary_key=True)
     solvent_id = db.Column(db.Integer, db.ForeignKey(Solvent.id), primary_key=True)
     value = db.Column(db.Float, nullable=False)
 
     solvent = db.relationship(Solvent, lazy=True)
-    compound = db.relationship(Compound, lazy=True)
+    ionic_compound = db.relationship("IonicCompound", lazy=True)
 
 
 class IonicComponent(db.Model):
@@ -27,7 +26,7 @@ class IonicCompound(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     anion_component_id = db.Column(db.Integer, db.ForeignKey(IonicComponent.id), nullable=False)
     cation_component_id = db.Column(db.Integer, db.ForeignKey(IonicComponent.id), nullable=False)
-    solubility = db.relationship(Solubility, lazy=True)
+    solubility = db.relationship(Solubility, back_populates="ionic_compound", lazy=True)
 
     anion_component = db.relationship(IonicComponent, foreign_keys=[anion_component_id], lazy=True)
     cation_component = db.relationship(IonicComponent, foreign_keys=[cation_component_id], lazy=True)

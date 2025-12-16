@@ -24,8 +24,8 @@ class IonPotential(db.Model):
     result_element_id = db.Column(db.Integer, db.ForeignKey(Element.id), nullable=True)
     potential = db.Column(db.Float, nullable=False)
 
-    ion = db.relationship("Ion", lazy=True)
-    result_ion = db.relationship("Ion", lazy=True)
+    ion = db.relationship("Ion", foreign_keys=[ion_id], lazy=True)
+    result_ion = db.relationship("Ion", foreign_keys=[result_ion_id],  lazy=True)
     result_compound = db.relationship(Compound, lazy=True)
     result_element = db.relationship(Element, lazy=True)
 
@@ -33,8 +33,8 @@ class Ion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     charge = db.Column(db.Integer)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    composition = db.relationship(IonElement, lazy=True)
-    potentials = db.relationship(IonPotential, foreign_keys=IonPotential.ion_id)
+    composition = db.relationship(IonElement, back_populates="ion", lazy=True)
+    potentials = db.relationship(IonPotential, foreign_keys=[IonPotential.ion_id], back_populates="ion")
 
 
 
