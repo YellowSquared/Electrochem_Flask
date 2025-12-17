@@ -1,4 +1,4 @@
-from app import db
+from electrochem_predict_flask import db
 from .element import Element
 
 

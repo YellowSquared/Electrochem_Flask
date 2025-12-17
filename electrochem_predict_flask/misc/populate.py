@@ -1,4 +1,4 @@
-from app import app, db, Element, Ion, IonicComponent, IonicCompound
+from electrochem_predict_flask import app, db, Element, Ion, IonicComponent, IonicCompound
 
 if __name__ == "__main__":
     with app.app_context():

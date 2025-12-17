@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from .compound import Compound
 from .element import Element
 
-from app import db
+from electrochem_predict_flask import db
 
 
 class IonElement(db.Model):

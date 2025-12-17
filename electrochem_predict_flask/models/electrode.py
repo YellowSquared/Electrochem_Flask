@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from .ion import Ion
-from app import db
+from electrochem_predict_flask import db
 
 
 class ElectrodeIonEffect(db.Model):

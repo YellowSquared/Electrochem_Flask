@@ -2,7 +2,7 @@ from typing import Optional
 from .ion import Ion
 from .ionic_compound import IonicCompound
 from .electrode import Electrode, ElectrodeIonEffect
-from app import db
+from electrochem_predict_flask import db
 
 
 class BathSoluteComponent(db.Model):
@@ -24,7 +24,6 @@ class Bath(db.Model):
     anode = db.relationship(Electrode, foreign_keys=[anode_id], lazy=True)
     cathode = db.relationship(Electrode, foreign_keys=[cathode_id], lazy=True)
 
-
     def dominating_anion(self) -> Optional[Ion]:
         anions = [
             solute for solute in self.solutes
@@ -34,16 +33,17 @@ class Bath(db.Model):
         return sorted_anions[0] if sorted_anions else None
 
     def get_anion_potentials_electrode_effect_applied(self) -> Optional[dict[int, float]]:
-        anions: list[Ion] = [
+        anions_potentials: list[Ion] = [
             solute for solute in self.solutes
-            if solute.ionic_compound.anion
+            if solute.ionic_compound.anion.potentials
         ]
 
         electrode_effect_dict = {effect.ion_id: effect for effect in self.cathode.ion_overpotential_effect}
 
         return {
-            anion.id: anion.ion_potential + electrode_effect_dict.get(anion.id, 0.0)
+            anion.id: potential + electrode_effect_dict.get(anion.id, 0.0)
             for anion in anions
+            for potential in anion.potentials
         }
 
     def get_cation_potentials_electrode_effect_applied(self) -> Optional[dict[int, float]]:

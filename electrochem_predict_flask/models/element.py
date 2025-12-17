@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-from app import db
+from electrochem_predict_flask import db
 
 
 class Element(db.Model):
