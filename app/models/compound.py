@@ -1,6 +1,7 @@
 from app import db
 from .element import Element
 
+
 class CompoundElementComponent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     compound_id = db.Column(db.Integer, db.ForeignKey("compound.id"))
@@ -9,6 +10,7 @@ class CompoundElementComponent(db.Model):
 
     element = db.relationship(Element, lazy=True)
     compound = db.relationship("Compound", lazy=True)
+
 
 class Compound(db.Model):
     id = db.Column(db.Integer, primary_key=True)

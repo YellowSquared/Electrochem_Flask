@@ -1,7 +1,7 @@
 from typing import Optional
 from .ion import Ion
 from .ionic_compound import IonicCompound
-from .electrode import Electrode
+from .electrode import Electrode, ElectrodeIonEffect
 from app import db
 
 
@@ -33,11 +33,31 @@ class Bath(db.Model):
         sorted_anions = sorted(anions, key=lambda x: x.charge, reverse=True)
         return sorted_anions[0] if sorted_anions else None
 
-    def dominating_cation(self) -> Optional[Ion]:
-        cations = [
+    def get_anion_potentials_electrode_effect_applied(self) -> Optional[dict[int, float]]:
+        anions: list[Ion] = [
+            solute for solute in self.solutes
+            if solute.ionic_compound.anion
+        ]
+
+        electrode_effect_dict = {effect.ion_id: effect for effect in self.cathode.ion_overpotential_effect}
+
+        return {
+            anion.id: anion.ion_potential + electrode_effect_dict.get(anion.id, 0.0)
+            for anion in anions
+        }
+
+    def get_cation_potentials_electrode_effect_applied(self) -> Optional[dict[int, float]]:
+        cations: list[Ion] = [
             solute for solute in self.solutes
             if solute.ionic_compound.cation
         ]
-        sorted_cations = sorted(cations, key=lambda x: x.charge, reverse=True)
-        return sorted_cations[0] if sorted_cations else None
+
+        electrode_effect_dict = {effect.ion_id: effect for effect in self.anode.ion_overpotential_effect}
+
+        return {
+            cation.id: cation.ion_potential + electrode_effect_dict.get(cation.id, 0.0)
+            for cation in cations
+        }
+
+
 
