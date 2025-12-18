@@ -1,4 +1,5 @@
-from electrochem_predict_flask import create_app
+from electrochem_predict_flask import create_app, Element
+
 
 def main():
     app = create_app()

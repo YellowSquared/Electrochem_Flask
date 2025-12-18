@@ -7,7 +7,7 @@ from electrochem_predict_flask import db
 
 class IonElement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'), nullable=False)
+    ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'))
     element_id = db.Column(db.Integer, db.ForeignKey(Element.id), nullable=False)
     element_amount = db.Column(db.Float, nullable=False, default=1)
 
@@ -17,46 +17,53 @@ class IonElement(db.Model):
 
 class IonResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    potential_id = db.Column(db.Integer, db.ForeignKey('ion_potential.id'), nullable=False)
+    result_id = db.Column(db.Integer, db.ForeignKey('ion_redox_result.id'))
     amount = db.Column(db.Float, nullable=False, default=1.0)
-    ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'), nullable=True)
+    ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'), nullable=False)
 
     ion = db.relationship("Ion", lazy=True)
-    potential = db.relationship('IonPotential', back_populates='ion_results')
+    result = db.relationship('IonRedoxResult', back_populates='ion_results')
 
 
 class CompoundResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    potential_id = db.Column(db.Integer, db.ForeignKey('ion_potential.id'), nullable=False)
+    result_id = db.Column(db.Integer, db.ForeignKey('ion_redox_result.id'))
     amount = db.Column(db.Float, nullable=False, default=1.0)
-    compound_id = db.Column(db.Integer, db.ForeignKey(Compound.id), nullable=True)
+    compound_id = db.Column(db.Integer, db.ForeignKey(Compound.id), nullable=False)
 
     compound = db.relationship(Compound, lazy=True)
-    potential = db.relationship('IonPotential', back_populates='compound_results')
+    result = db.relationship('IonRedoxResult', back_populates='compound_results')
 
 class ElementResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    potential_id = db.Column(db.Integer, db.ForeignKey('ion_potential.id'), nullable=False)
+    result_id = db.Column(db.Integer, db.ForeignKey('ion_redox_result.id'))
     amount = db.Column(db.Float, nullable=False, default=1.0)
-    element_id = db.Column(db.Integer, db.ForeignKey(Element.id), nullable=True)
+    element_id = db.Column(db.Integer, db.ForeignKey(Element.id), nullable=False)
 
     element = db.relationship(Element, lazy=True)
-    potential = db.relationship('IonPotential', back_populates='element_results')
+    result = db.relationship('IonRedoxResult', back_populates='element_results')
 
 
-class IonPotential(db.Model):
+class IonRedoxResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'), nullable=False)
-    potential = db.Column(db.Float, nullable=False, default=0)
+    redox_id = db.Column(db.Integer, db.ForeignKey("ion_redox_reaction.id"))
 
-    ion = db.relationship('Ion', lazy=True)
-
-    ion_results = db.relationship(IonResult, back_populates='potential')
-    compound_results = db.relationship(CompoundResult, back_populates='potential')
-    element_results = db.relationship(ElementResult, back_populates='potential')
+    ion_results = db.relationship(IonResult, back_populates='result')
+    compound_results = db.relationship(CompoundResult, back_populates='result')
+    element_results = db.relationship(ElementResult, back_populates='result')
+    redox = db.relationship('IonRedoxReaction', back_populates='result')
 
     def get_results(self):
         return self.ion_results, self.compound_results, self.element_results
+
+
+class IonRedoxReaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'))
+    potential = db.Column(db.Float, nullable=False, default=0)
+
+    result = db.relationship(IonRedoxResult, back_populates='redox')
+    ion = db.relationship('Ion', lazy=True)
 
 
 class Ion(db.Model):
@@ -65,15 +72,10 @@ class Ion(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
     composition = db.relationship(IonElement, back_populates="ion", lazy=True)
 
-    potentials = db.relationship(IonPotential, back_populates='ion')
+    redox_potentials = db.relationship(IonRedoxReaction, back_populates='ion')
 
     def is_anion(self) -> bool:
         return self.charge < 0
 
     def is_cation(self) -> bool:
         return self.charge > 0
-
-
-
-
-
