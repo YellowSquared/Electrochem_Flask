@@ -24,12 +24,17 @@ class IonicComponent(db.Model):
 class IonicCompound(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    anion_component_id = db.Column(db.Integer, db.ForeignKey(IonicComponent.id), nullable=False)
     cation_component_id = db.Column(db.Integer, db.ForeignKey(IonicComponent.id), nullable=False)
+    anion_component_id = db.Column(db.Integer, db.ForeignKey(IonicComponent.id), nullable=False)
+
     solubility = db.relationship(Solubility, back_populates="ionic_compound", lazy=True)
 
-    anion_component = db.relationship(IonicComponent, foreign_keys=[anion_component_id], lazy=True)
     cation_component = db.relationship(IonicComponent, foreign_keys=[cation_component_id], lazy=True)
+    anion_component = db.relationship(IonicComponent, foreign_keys=[anion_component_id], lazy=True)
+
+
+    def get_formula(self):
+        return self.cation_component.ion.get_formula() + self.anion_component.ion.get_formula()
 
 
 

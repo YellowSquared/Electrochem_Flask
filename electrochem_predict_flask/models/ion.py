@@ -10,6 +10,7 @@ class IonElement(db.Model):
     ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'))
     element_id = db.Column(db.Integer, db.ForeignKey(Element.id), nullable=False)
     element_amount = db.Column(db.Float, nullable=False, default=1)
+    element_charge = db.Column(db.Float)
 
     ion = db.relationship("Ion", lazy=True)
     element = db.relationship(Element, lazy=True)
@@ -61,6 +62,7 @@ class IonRedoxReaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ion_id = db.Column(db.Integer, db.ForeignKey('ion.id'))
     potential = db.Column(db.Float, nullable=False, default=0)
+    ion_amount = db.Column(db.Float, nullable=False, default=1)
 
     result = db.relationship(IonRedoxResult, back_populates='redox')
     ion = db.relationship('Ion', lazy=True)
@@ -79,3 +81,17 @@ class Ion(db.Model):
 
     def is_cation(self) -> bool:
         return self.charge > 0
+
+    def get_formula(self):
+        formula = ""
+        for comp in self.composition:
+            formula += comp.element.sign
+
+            if comp.element_amount == 1:
+                continue
+            elif comp.element_amount.is_integer():
+                formula += str(int(comp.element_amount))
+            else:
+                formula += str(comp.element_amount)
+
+        return formula

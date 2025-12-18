@@ -17,7 +17,7 @@ class ElectrodeOverpotentialEffect(db.Model):
 class Electrode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    material = db.Column(db.String(100), nullable=False)
+    material = db.Column(db.String(100))
     overpotential_effect = db.relationship(ElectrodeOverpotentialEffect, back_populates="electrode", lazy=True)
 
     def get_effect_on_redox(self, ion_redox_id: int) -> float:

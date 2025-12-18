@@ -10,10 +10,11 @@ from .models import *
 
 def create_app():
     load_dotenv()
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../frontend/static', template_folder='../frontend/templates')
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
     from .routes import main
     app.register_blueprint(main)

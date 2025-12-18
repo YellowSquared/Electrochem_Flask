@@ -25,12 +25,16 @@ class Bath(db.Model):
     anode = db.relationship(Electrode, foreign_keys=[anode_id], lazy=True)
     cathode = db.relationship(Electrode, foreign_keys=[cathode_id], lazy=True)
 
-    def dominating_reduction_(self) -> Optional[IonRedoxReaction]:
-        anions = [
-            solute.anion_component.ion_id for solute in self.solutes
-        ]
-        sorted_anions = sorted(anions, key=lambda x: x.charge, reverse=True)
-        return sorted_anions[0] if sorted_anions else None
+    def dominating_reduction_reaction(self, n: int = 1) -> Optional[IonRedoxReaction]:
+        reaction_potentials = self.get_anion_potentials_electrode_effect_applied()
+
+        sorted_potentials = sorted(reaction_potentials.items(), key=lambda x: x[1], reverse=True)
+
+        if 0 < n <= len(sorted_potentials):
+            redox_id = sorted_potentials[n - 1][0]
+            return IonRedoxReaction.query.get(redox_id)
+        else:
+            return None
 
     def get_anion_potentials_electrode_effect_applied(self) -> dict[int, int]:
         anion_potentials: list[IonRedoxReaction] = [
