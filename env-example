@@ -1,0 +1,2 @@
+SECRET_KEY='key'
+DATABASE_URL=postgresql://{имя пользователя postgres без скобок}:{пароль без скобок}@localhost:{port без скобок})/{имя базы данных без скобок}
