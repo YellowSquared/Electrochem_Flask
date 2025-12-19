@@ -17,3 +17,5 @@ class Compound(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     components = db.relationship(CompoundElementComponent, back_populates="compound", lazy=True)
 
+    def get_formula(self):
+

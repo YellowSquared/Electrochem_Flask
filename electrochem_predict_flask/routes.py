@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 
-from electrochem_predict_flask import IonicCompound
+from electrochem_predict_flask import IonicCompound, Solvent
 from electrochem_predict_flask.forms.bath_form import BathForm
 
 main = Blueprint('main', __name__)
@@ -13,10 +13,13 @@ def index():
 def predict():
     form = BathForm()
 
-    compounds = IonicCompound.query.all()
     form.options.choices = [
         (compound.id, compound.get_formula() + ", " + compound.name)
-        for compound in compounds
+        for compound in IonicCompound.query.all()
+    ]
+    form.solvent.choices = [
+        (solvent.id, solvent.compound.get_)
+        for solvent in Solvent.query.all()
     ]
 
     if form.validate_on_submit():

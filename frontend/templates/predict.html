@@ -7,7 +7,7 @@
 <script defer src="../static/dist/main.js"></script></head>
 <body>
 
-    <h1>Выберите вещество</h1>
+    <h1>Предсказание реакции</h1>
 
     <!-- Flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -24,11 +24,25 @@
     <form method="POST">
         {{ form.hidden_tag() }}  <!-- CSRF token -->
         <div>
-            {{ form.name.label }} {{ form.name() }}
-        </div>
-        <div>
             {{ form.options.label }} {{ form.options() }}
         </div>
+
+        <div>
+            {{ form.concentration.label }} {{ form.concentration() }}
+        </div>
+
+        <div>
+            {{ form.solvent.label }} {{ form.solvent() }}
+        </div>
+
+        <div>
+            {{ form.anode.label }} {{ form.anode() }}
+        </div>
+
+        <div>
+            {{ form.cathode.label }} {{ form.cathode() }}
+        </div>
+
         <div>
             {{ form.submit() }}
         </div>

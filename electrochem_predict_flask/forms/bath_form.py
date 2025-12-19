@@ -4,13 +4,9 @@ from wtforms.validators import DataRequired
 
 
 class BathForm(FlaskForm):
-    # A simple text input field with validation
-    name = StringField('Name', validators=[DataRequired()])
-
-
     options = SelectField('Выберите вещество', choices=[],
                           validators=[DataRequired()])
-    concentration = StringField('Выберите концентрацию грамм/литр (WIP)', validators=[DataRequired()])
+    concentration = StringField('Укажите концентрацию (грамм/литр) (WIP)', validators=[DataRequired()])
 
     solvent = SelectField('Выберите растворитель', choices=[], validators=[DataRequired()])
 
@@ -20,7 +16,3 @@ class BathForm(FlaskForm):
 
     # Submit button
     submit = SubmitField('Submit')
-
-    electrodes = [
-
-    ]
