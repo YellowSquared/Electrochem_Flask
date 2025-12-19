@@ -1,5 +1,6 @@
 from electrochem_predict_flask import db, Element, Ion, IonicCompound, IonElement, IonicComponent, create_app, \
-    Electrode, IonRedoxReaction, IonRedoxResult, IonResult, CompoundResult, ElementResult, ElectrodeOverpotentialEffect
+    Electrode, IonRedoxReaction, IonRedoxResult, IonResult, CompoundResult, ElementResult, ElectrodeOverpotentialEffect, \
+    Compound, CompoundElementComponent
 
 if __name__ == "__main__":
     app = create_app()
@@ -101,8 +102,23 @@ if __name__ == "__main__":
 
         db.session.commit()
 
-        # Create IonicCompounds (e.g., Sodium Hydroxide, Magnesium Chloride)
         compounds = [
+            ("Water", (("Hydrogen", 2), ("Oxygen", 1)))
+        ]
+
+        for name, elements in compounds:
+            comp = Compound(name=name)
+            for element_name, amount in elements:
+                element = CompoundElementComponent(compound_id=comp.id, element_id=Element.query.filter_by(
+                    name=element_name).first().id, element_amount=amount)
+                db.session.add(element)
+            db.session.add(comp)
+
+        db.session.commit()
+
+
+        # Create IonicCompounds (e.g., Sodium Hydroxide, Magnesium Chloride)
+        ionic_compounds = [
             ("Lithium Hydroxide", "Lithium", "Hydroxide"),  # Lithium Hydroxide (LiOH)
             ("Copper(II) Sulfate", "Copper", "Sulfate"),  # Copper(II) Sulfate (CuSO4)
             ("Zinc Chloride", "Zinc", "Chlorine"),  # Zinc Chloride (ZnCl2)
@@ -118,7 +134,7 @@ if __name__ == "__main__":
             ("Potassium Hydroxide", "Potassium", "Hydroxide"),  # Potassium Hydroxide (KOH)
         ]
 
-        for name, cation_name, anion_name in compounds:
+        for name, cation_name, anion_name in ionic_compounds:
             cation = Ion.query.filter_by(name=cation_name).first()
             anion = Ion.query.filter_by(name=anion_name).first()
 
@@ -160,26 +176,21 @@ if __name__ == "__main__":
 
             # Handle Ion Result
             if result_ion:
-                print(result_ion)
                 ion_result = IonResult(result_id=result.id, amount=result_ion[1],
                                        ion=Ion.query.filter_by(name=result_ion[0]).first())
                 db.session.add(ion_result)
-                result.ion_results = ion_result
 
             # Handle Compound Result
             if result_compound:
-                print(result_compound)
                 compound_result = CompoundResult(result_id=result.id, amount=result_compound[1],
-                                                 ion=Ion.query.filter_by(name=result_compound[0]).first())
+                                                 compound=Compound.query.filter_by(name=result_compound[0]).first())
                 db.session.add(compound_result)
-                result.compound_results = compound_result
 
             # Handle Element Result (if any)
             if result_element:
                 element_result = ElementResult(result_id=result.id, amount=result_element[1],
-                                               ion=Ion.query.filter_by(name=result_element[0]).first())
+                                               element=Element.query.filter_by(name=result_element[0]).first())
                 db.session.add(element_result)
-                result.element_results = element_result
 
             result.redox = redox
             db.session.add(result)
@@ -191,9 +202,11 @@ if __name__ == "__main__":
         ]
 
         for e_name, reaction, effect in e_effects:
-            db.session.add(ElectrodeOverpotentialEffect(electrode_id=Electrode.query.filter_by(name=e_name).first()),
-                           reaction_id=reaction.id,
-                           overpotential_effect=effect)
+            db.session.add(ElectrodeOverpotentialEffect(electrode=Electrode.query.filter_by(name=e_name).first(),
+                                                        reaction=reaction,
+                                                        overpotential_effect=effect
+                                                        )
+            )
         db.session.commit()
 
 
