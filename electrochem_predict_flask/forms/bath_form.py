@@ -1,12 +1,20 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms_sqlalchemy.fields import QuerySelectMultipleField
+from wtforms.validators import DataRequired, ValidationError
+from electrochem_predict_flask.models import IonicCompound
 
+
+def min_selections(min_count):
+    def _min_selections(form, field):
+        if len(field.data) < min_count:
+            raise ValidationError()
+    return _min_selections
 
 class BathForm(FlaskForm):
-    options = SelectField('Выберите вещество', choices=[],
-                          validators=[DataRequired()])
-    concentration = StringField('Укажите концентрацию (грамм/литр) (WIP)', validators=[DataRequired()])
+    solute = QuerySelectMultipleField('Выберите вещество/вещества (Ctrl)', query_factory=lambda: IonicCompound.query.all(), validators=[DataRequired(), min_selections(1)])
+
+    concentration = StringField('Укажите концентрацию вещества (грамм/литр) (WIP)', validators=[DataRequired()])
 
     solvent = SelectField('Выберите растворитель', choices=[], validators=[DataRequired()])
 
@@ -14,5 +22,4 @@ class BathForm(FlaskForm):
 
     cathode = SelectField('Выберите катод', choices=[], validators=[DataRequired()])
 
-    # Submit button
     submit = SubmitField('Submit')

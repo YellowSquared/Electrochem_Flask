@@ -6,7 +6,7 @@ authors = [
     {name = "Безрукавый Андрей"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "flask (>=3.1.2,<4.0.0)",
     "flask-migrate (>=4.1.0,<5.0.0)",
@@ -16,6 +16,7 @@ dependencies = [
     "alembic (>=1.17.2,<2.0.0)",
     "psycopg2 (>=2.9.11,<3.0.0)",
     "flask-wtf (>=1.2.2,<2.0.0)",
+    "wtforms-sqlalchemy (>=0.4.2,<0.5.0)",
 ]
 
 
@@ -24,4 +25,4 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-echem_predict = "electrochem_predict_flask.main:main"
+echem = "electrochem_predict_flask.main:main"

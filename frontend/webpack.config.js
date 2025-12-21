@@ -12,6 +12,11 @@ const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader
 
 
 const config = {
+    watchOptions: {
+        ignored: /node_modules/,  // Ignore node_modules to speed up watching
+        poll: 1000,                // Use polling if necessary (useful on networked file systems)
+        aggregateTimeout: 300,     // Delay rebuild after changes
+    },
     entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'static/dist'),
