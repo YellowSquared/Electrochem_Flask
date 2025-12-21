@@ -1,0 +1,28 @@
+[project]
+name = "electrochem-predict-flask"
+version = "0.1.0"
+description = "Движок по предсказанию реакций электролиза + web-frontend"
+authors = [
+    {name = "Безрукавый Андрей"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask (>=3.1.2,<4.0.0)",
+    "flask-migrate (>=4.1.0,<5.0.0)",
+    "flask-sqlalchemy (>=3.1.1,<4.0.0)",
+    "python-dotenv (>=1.2.1,<2.0.0)",
+    "sqlalchemy (>=2.0.45,<3.0.0)",
+    "alembic (>=1.17.2,<2.0.0)",
+    "psycopg2 (>=2.9.11,<3.0.0)",
+    "flask-wtf (>=1.2.2,<2.0.0)",
+    "wtforms-sqlalchemy (>=0.4.2,<0.5.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+echem = "electrochem_predict_flask.main:main"

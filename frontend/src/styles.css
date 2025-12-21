@@ -1,0 +1,131 @@
+body {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  background-color: #121212;
+  color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  color: #e0e0e0;
+  margin: 10px 0;
+}
+
+button {
+  background-color: #ffeb3b;
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #fdd835;
+  transform: translateY(-2px);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 235, 59, 0.4);
+}
+
+button.small-square {
+  background-color: #ffeb3b;
+  color: #000;
+  border: none;
+  padding: 4px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button.small-square:hover {
+  background-color: #fdd835;
+  transform: translateY(-1px);
+}
+
+button.small-square:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 235, 59, 0.4);
+}
+
+.form-block {
+  flex-direction: column-reverse;
+  gap: 40px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.concentration-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 2px solid #444;
+  background-color: #333;
+  color: #f0f0f0;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.select-wrapper select:focus {
+  border-color: #ffeb3b;
+  outline: none;
+  box-shadow: 0 0 4px rgba(255, 235, 59, 0.4);
+}
+
+.select-wrapper select:hover {
+  background-color: #444;
+  border-color: #fdd835;
+}
+
+.vertical-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}

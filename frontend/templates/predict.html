@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrolysis Predict</title>
+<script defer src="../static/dist/main.js"></script></head>
+<body>
+
+    <h1>Предсказание реакции</h1>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Render the form -->
+    <form method="POST">
+        {{ form.hidden_tag() }}  <!-- CSRF token -->
+    
+        <div class="vertical-layout" id="solutes-block">
+            <div class="form-block" id="solute-container">
+                <div class="select-wrapper">
+                    {{ form.solute.label }} {{ form.solute() }}
+                </div>
+
+                <div class="concentration-container">
+                    {{ form.concentration.label }} {{ form.concentration() }}
+                </div>
+            </div>
+        </div>
+
+        <div>
+            {{ form.solvent.label }} {{ form.solvent() }}
+        </div>
+
+        <div>
+            {{ form.anode.label }} {{ form.anode() }}
+        </div>
+
+        <div>
+            {{ form.cathode.label }} {{ form.cathode() }}
+        </div>
+
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+
+    {% if dominating_cation_reaction %}
+        <h3>Dominating Cation Reduction Reaction:</h3>
+        <p>{{ dominating_cation_reaction }}</p>
+    {% endif %}
+
+    {% if dominating_anion_reaction %}
+        <h3>Dominating Anion Oxidation Reaction:</h3>
+        <p>{{ dominating_anion_reaction }}</p>
+    {% endif %}
+
+</body>
+</html>
