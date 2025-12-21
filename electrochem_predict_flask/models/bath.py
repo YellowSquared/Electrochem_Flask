@@ -26,9 +26,18 @@ class Bath(db.Model):
     cathode = db.relationship(Electrode, foreign_keys=[cathode_id], lazy=True)
 
     def dominating_reduction_reaction(self, n: int = 1) -> Optional[IonRedoxReaction]:
-        reaction_potentials = self.get_anion_potentials_electrode_effect_applied()
+        cation_potentials = self.get_cation_potentials_electrode_effect_applied()
+        sorted_potentials = sorted(cation_potentials.items(), key=lambda x: x[1], reverse=True)
 
-        sorted_potentials = sorted(reaction_potentials.items(), key=lambda x: x[1], reverse=True)
+        if 0 < n <= len(sorted_potentials):
+            redox_id = sorted_potentials[n - 1][0]
+            return IonRedoxReaction.query.get(redox_id)
+        else:
+            return None
+
+    def dominating_oxidation_reaction(self, n: int = 1) -> Optional[IonRedoxReaction]:
+        anion_potentials = self.get_anion_potentials_electrode_effect_applied()
+        sorted_potentials = sorted(anion_potentials.items(), key=lambda x: x[1], reverse=False)
 
         if 0 < n <= len(sorted_potentials):
             redox_id = sorted_potentials[n - 1][0]
@@ -38,12 +47,12 @@ class Bath(db.Model):
 
     def get_anion_potentials_electrode_effect_applied(self) -> dict[int, int]:
         anion_potentials: list[IonRedoxReaction] = [
-            ionic_compound.anion_component.ion.potentials
-            for ionic_compound in self.solutes.ionic_compound
+            ionic_compound.ionic_compound.anion_component.ion.potentials
+            for ionic_compound in self.solutes
         ]
 
         return {
-            potential.id: potential.potential + self.cathode.get_effect_on_redox(potential.id)
+            potential.id: potential.potential + self.anode.get_effect_on_redox(potential.id)
             for potential in anion_potentials
         }
 
@@ -54,9 +63,6 @@ class Bath(db.Model):
         ]
 
         return {
-            potential.id: potential.potential + self.anode.get_effect_on_redox(potential.id)
+            potential.id: potential.potential + self.cathode.get_effect_on_redox(potential.id)
             for potential in cation_potentials
         }
-
-
-

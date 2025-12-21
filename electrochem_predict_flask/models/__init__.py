@@ -4,4 +4,5 @@ from .electrode import *
 from .element import *
 from .ion import *
 from .ionic_compound import *
-from .solvent import *
+from .ionic_solvent import *
+from .bath_temp import *

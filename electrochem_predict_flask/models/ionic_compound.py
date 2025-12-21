@@ -1,15 +1,13 @@
-from flask_sqlalchemy import SQLAlchemy
-from .solvent import Solvent
 from .ion import Ion
 from electrochem_predict_flask import db
 
 
 class Solubility(db.Model):
     ionic_compound_id = db.Column(db.Integer, db.ForeignKey("ionic_compound.id"), primary_key=True)
-    solvent_id = db.Column(db.Integer, db.ForeignKey(Solvent.id), primary_key=True)
+    solvent_id = db.Column(db.Integer, db.ForeignKey("ionic_solvent.id"), primary_key=True)
     value = db.Column(db.Float, nullable=False)
 
-    solvent = db.relationship(Solvent, lazy=True)
+    solvent = db.relationship("IonicSolvent", lazy=True)
     ionic_compound = db.relationship("IonicCompound", lazy=True)
 
 
@@ -35,6 +33,9 @@ class IonicCompound(db.Model):
 
     def get_formula(self):
         return self.cation_component.ion.get_formula() + self.anion_component.ion.get_formula()
+    
+    def __repr__(self):
+        return self.name + ": " + self.get_formula()
 
 
 
